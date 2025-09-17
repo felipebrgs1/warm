@@ -1,11 +1,66 @@
 import { Router } from 'express';
 import { EvolutionApiService } from '../services/evolution-api';
 import { WebhookController } from '../controllers/webhook.controller';
+import { WarmupController } from '../controllers/warmup.controller';
+import { AnalyticsController } from '../controllers/analytics.controller';
 import { logger } from '../utils/logger';
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     WhatsAppInstance:
+ *       type: object
+ *       properties:
+ *         instance:
+ *           type: string
+ *         status:
+ *           type: string
+ *         connectionState:
+ *           type: string
+ *         owner:
+ *           type: string
+ *         qrcode:
+ *           type: string
+ *     MessageData:
+ *       type: object
+ *       required:
+ *         - number
+ *         - text
+ *       properties:
+ *         number:
+ *           type: string
+ *         text:
+ *           type: string
+ *         delay:
+ *           type: number
+ *         quoted:
+ *           type: string
+ *         linkPreview:
+ *           type: boolean
+ *     ApiResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         data:
+ *           type: object
+ *         error:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: WhatsApp
+ *   description: WhatsApp API endpoints
+ */
 
 const whatsappRoutes = Router();
 const evolutionService = new EvolutionApiService();
 const webhookController = new WebhookController();
+const warmupController = new WarmupController();
+const analyticsController = new AnalyticsController();
 
 whatsappRoutes.get('/instance/:instanceName/status', async (req, res) => {
   try {
@@ -171,5 +226,22 @@ whatsappRoutes.get('/messages/:instanceName', async (req, res) => {
 
 whatsappRoutes.post('/webhook/message', webhookController.handleIncomingMessage);
 whatsappRoutes.post('/webhook/connection', webhookController.handleConnectionUpdate);
+
+// Warmup endpoints
+whatsappRoutes.post('/warmup/start', warmupController.startWarmup);
+whatsappRoutes.get('/warmup/:instanceName/status', warmupController.getWarmupStatus);
+whatsappRoutes.post('/warmup/:instanceName/send', warmupController.sendWarmupMessage);
+whatsappRoutes.post('/warmup/:instanceName/advance-stage', warmupController.advanceStage);
+whatsappRoutes.get('/warmup/stages', warmupController.getStages);
+whatsappRoutes.get('/warmup/:instanceName/metrics', warmupController.getMetrics);
+whatsappRoutes.post('/warmup/:instanceName/schedule', warmupController.scheduleMessages);
+whatsappRoutes.get('/warmup/:instanceName/scheduled', warmupController.getScheduledMessages);
+
+// Analytics endpoints
+whatsappRoutes.get('/analytics/:instanceName', analyticsController.getAnalytics);
+whatsappRoutes.get('/analytics/:instanceName/health', analyticsController.getHealthScore);
+whatsappRoutes.get('/analytics/:instanceName/dashboard', analyticsController.getDashboard);
+whatsappRoutes.get('/analytics/:instanceName/export', analyticsController.exportMetrics);
+whatsappRoutes.get('/analytics/:instanceName/comparison', analyticsController.getComparison);
 
 export { whatsappRoutes };
