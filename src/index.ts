@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { router } from './routes';
-import swaggerJsdoc from 'swagger-jsdoc';
+import { RegisterRoutes } from './tsoa-routes';
 import swaggerUi from 'swagger-ui-express';
+import * as fs from 'fs';
+import * as path from 'path';
 
 dotenv.config();
 
@@ -10,38 +11,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api', router);
 
-// Swagger configuration
-const specs = swaggerJsdoc({
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'WhatsApp Warm-up API',
-      version: '1.0.0',
-      description: 'API para warm-up de números WhatsApp usando Evolution API com estratégia progressiva de estágios',
-      contact: {
-        name: 'WhatsApp Warm-up API',
-        email: 'contact@example.com'
-      },
-      license: {
-        name: 'ISC',
-        url: 'https://opensource.org/licenses/ISC'
-      }
-    },
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT || 3000}`,
-        description: 'Development server'
-      }
-    ]
-  },
-  apis: ['./src/routes/*.ts', './src/index.ts']
-});
+// Register tsoa routes
+RegisterRoutes(app);
+
+// Serve swagger UI with generated spec
+const swaggerSpec = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../dist/swagger.json'), 'utf8')
+);
 
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(specs, {
+app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'WhatsApp Warm-up API Documentation'
@@ -50,7 +31,7 @@ app.get('/api-docs', swaggerUi.setup(specs, {
 // Alternative JSON endpoint
 app.get('/api-docs.json', (_req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.send(specs);
+  res.send(swaggerSpec);
 });
 
 app.get('/', (_req, res) => {

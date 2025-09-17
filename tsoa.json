@@ -1,0 +1,28 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "spec": {
+    "outputDirectory": "./dist",
+    "specVersion": 3,
+    "host": "localhost:3000",
+    "basePath": "/",
+    "securityDefinitions": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "access_token",
+        "in": "query"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "./src",
+    "routesFileName": "tsoa-routes.ts"
+  },
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}
