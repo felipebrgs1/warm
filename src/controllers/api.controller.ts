@@ -1,7 +1,7 @@
 import { Route, Controller, Get, Post, Body, Path, Query, Delete, Response } from 'tsoa';
-import { WhatsAppController } from './whatsapp.controller';
-import { WarmupController } from './warmup.controller';
-import { AnalyticsController } from './analytics.controller';
+import { WhatsAppController } from './whatsapp.controller.js';
+import { WarmupController } from './warmup.controller.js';
+import { AnalyticsController } from './analytics.controller.js';
 
 // Response type interfaces
 interface InstanceStatus {
@@ -76,12 +76,14 @@ export class WhatsAppApiController extends Controller {
     @Response<InstanceStatus>(200, 'Instance status retrieved successfully')
     async getInstanceStatus(@Path() instanceName: string): Promise<InstanceStatus> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.whatsAppController.getStatus(req, res);
+        await this.whatsAppController.getStatus(req, res);
+        return responseData;
     }
 
     @Post('instance/create')
@@ -96,7 +98,7 @@ export class WhatsAppApiController extends Controller {
         } as any;
 
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         const instance = await service.createInstance(
             body.instanceName,
@@ -114,7 +116,7 @@ export class WhatsAppApiController extends Controller {
     @Response<QrCodeResponse>(200, 'QR code retrieved successfully')
     async getQrCode(@Path() instanceName: string): Promise<QrCodeResponse> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         return service.getQrCode(instanceName);
     }
@@ -123,7 +125,7 @@ export class WhatsAppApiController extends Controller {
     @Response<ConnectionState>(200, 'Connection state retrieved successfully')
     async getConnectionState(@Path() instanceName: string): Promise<ConnectionState> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         return service.getConnectionState(instanceName);
     }
@@ -132,7 +134,7 @@ export class WhatsAppApiController extends Controller {
     @Response<{ success: boolean }>(200, 'Instance disconnected successfully')
     async disconnectInstance(@Path() instanceName: string): Promise<{ success: boolean }> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         return service.disconnect(instanceName);
     }
@@ -151,7 +153,7 @@ export class WhatsAppApiController extends Controller {
         },
     ): Promise<SendMessageResponse> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         const messageData = {
             number: body.number.replace(/\D/g, ''),
@@ -184,7 +186,7 @@ export class WhatsAppApiController extends Controller {
         },
     ): Promise<SendMediaResponse> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         const mediaData = {
             number: body.number.replace(/\D/g, ''),
@@ -210,7 +212,7 @@ export class WhatsAppApiController extends Controller {
         @Query() limit: number = 50,
     ): Promise<GetMessagesResponse> {
         const evolutionService =
-            require('../services/evolution-api').EvolutionApiService;
+            require('../services/evolution-api.js').EvolutionApiService;
         const service = new evolutionService();
         const messages = await service.fetchMessages(instanceName, limit);
 
@@ -227,24 +229,28 @@ export class WhatsAppApiController extends Controller {
         @Body() body: { instanceName: string; contacts: string[] },
     ): Promise<{ success: boolean; message: string }> {
         const req = { body } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.startWarmup(req, res);
+        await this.warmupController.startWarmup(req, res);
+        return responseData;
     }
 
     @Get('warmup/{instanceName}/status')
     @Response<WarmupStatus>(200, 'Warmup status retrieved successfully')
     async getWarmupStatus(@Path() instanceName: string): Promise<WarmupStatus> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.getWarmupStatus(req, res);
+        await this.warmupController.getWarmupStatus(req, res);
+        return responseData;
     }
 
     @Post('warmup/{instanceName}/send')
@@ -254,95 +260,111 @@ export class WhatsAppApiController extends Controller {
         @Body() body: { count?: number; force?: boolean },
     ): Promise<{ success: boolean; sent: number }> {
         const req = { params: { instanceName }, body } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.sendWarmupMessage(req, res);
+        await this.warmupController.sendWarmupMessage(req, res);
+        return responseData;
     }
 
     @Post('warmup/{instanceName}/advance-stage')
     @Response<{ success: boolean; newStage: number }>(200, 'Stage advanced successfully')
     async advanceStage(@Path() instanceName: string): Promise<{ success: boolean; newStage: number }> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.advanceStage(req, res);
+        await this.warmupController.advanceStage(req, res);
+        return responseData;
     }
 
     @Get('warmup/stages')
     @Response<{ stages: string[] }>(200, 'Stages retrieved successfully')
     async getStages(): Promise<{ stages: string[] }> {
         const req = {} as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.getStages(req, res);
+        await this.warmupController.getStages(req, res);
+        return responseData;
     }
 
     @Get('warmup/{instanceName}/metrics')
     @Response<{ metrics: any; period: string }>(200, 'Metrics retrieved successfully')
     async getMetrics(@Path() instanceName: string, @Query() days: number = 7): Promise<{ metrics: any; period: string }> {
         const req = { params: { instanceName }, query: { days } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.warmupController.getMetrics(req, res);
+        await this.warmupController.getMetrics(req, res);
+        return responseData;
     }
 
     @Get('analytics/{instanceName}')
     @Response<AnalyticsResponse>(200, 'Analytics retrieved successfully')
     async getAnalytics(@Path() instanceName: string): Promise<AnalyticsResponse> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.analyticsController.getAnalytics(req, res);
+        await this.analyticsController.getAnalytics(req, res);
+        return responseData;
     }
 
     @Get('analytics/{instanceName}/health')
     @Response<{ score: number; status: string }>(200, 'Health score retrieved successfully')
     async getHealthScore(@Path() instanceName: string): Promise<{ score: number; status: string }> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.analyticsController.getHealthScore(req, res);
+        await this.analyticsController.getHealthScore(req, res);
+        return responseData;
     }
 
     @Get('analytics/{instanceName}/dashboard')
     @Response<DashboardResponse>(200, 'Dashboard data retrieved successfully')
     async getDashboard(@Path() instanceName: string): Promise<DashboardResponse> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.analyticsController.getDashboard(req, res);
+        await this.analyticsController.getDashboard(req, res);
+        return responseData;
     }
 
     @Get('analytics/{instanceName}/export')
     @Response<{ data: any; format: string }>(200, 'Metrics exported successfully')
     async exportMetrics(@Path() instanceName: string): Promise<{ data: any; format: string }> {
         const req = { params: { instanceName } } as any;
+        let responseData: any;
         const res = {
-            json: (data: any) => data,
+            json: (data: any) => { responseData = data; },
             status: () => res,
         } as any;
 
-        return this.analyticsController.exportMetrics(req, res);
+        await this.analyticsController.exportMetrics(req, res);
+        return responseData;
     }
 }

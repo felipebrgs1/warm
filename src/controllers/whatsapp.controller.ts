@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { EvolutionApiService } from '../services/evolution-api';
-import { logger } from '../utils/logger';
+import { EvolutionApiService } from '../services/evolution-api.js';
+import { logger } from '../utils/logger.js';
 
 export class WhatsAppController {
   private evolutionService: EvolutionApiService;

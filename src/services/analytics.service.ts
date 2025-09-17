@@ -1,6 +1,6 @@
-import { WarmupService } from './warmup.service';
-import { DailyMetrics } from '../types/warmup';
-import { logger } from '../utils/logger';
+import { WarmupService } from './warmup.service.js';
+import { DailyMetrics } from '../types/warmup.js';
+import { logger } from '../utils/logger.js';
 
 export interface AnalyticsData {
   instanceName: string;

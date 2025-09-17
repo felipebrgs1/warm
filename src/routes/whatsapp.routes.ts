@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { EvolutionApiService } from '../services/evolution-api';
-import { WebhookController } from '../controllers/webhook.controller';
-import { WarmupController } from '../controllers/warmup.controller';
-import { AnalyticsController } from '../controllers/analytics.controller';
-import { logger } from '../utils/logger';
+import { EvolutionApiService } from '../services/evolution-api.js';
+import { WebhookController } from '../controllers/webhook.controller.js';
+import { WarmupController } from '../controllers/warmup.controller.js';
+import { AnalyticsController } from '../controllers/analytics.controller.js';
+import { logger } from '../utils/logger.js';
 
 /**
  * @swagger

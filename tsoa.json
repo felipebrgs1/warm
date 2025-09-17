@@ -17,7 +17,8 @@
   },
   "routes": {
     "routesDir": "./src",
-    "routesFileName": "tsoa-routes.ts"
+    "routesFileName": "tsoa-routes.ts",
+    "esModule": true
   },
   "ignore": [
     "**/node_modules/**",

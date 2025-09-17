@@ -1,5 +1,5 @@
-import { EvolutionApiService } from '../services/evolution-api';
-import { logger } from '../utils/logger';
+import { EvolutionApiService } from '../services/evolution-api.js';
+import { logger } from '../utils/logger.js';
 
 class WhatsAppWarmupSimulator {
   private evolutionService: EvolutionApiService;

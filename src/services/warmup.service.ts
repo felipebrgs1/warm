@@ -1,5 +1,5 @@
-import { WarmupStage, WarmupConfig, DailyMetrics, MessageTemplate, ScheduledMessage } from '../types/warmup';
-import { logger } from '../utils/logger';
+import { WarmupStage, WarmupConfig, DailyMetrics, MessageTemplate, ScheduledMessage } from '../types/warmup.js';
+import { logger } from '../utils/logger.js';
 
 export class WarmupService {
   private readonly STAGES: WarmupStage[] = [

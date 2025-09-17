@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { AnalyticsService } from '../services/analytics.service';
-import { WarmupService } from '../services/warmup.service';
-import { logger } from '../utils/logger';
+import { AnalyticsService } from '../services/analytics.service.js';
+import { WarmupService } from '../services/warmup.service.js';
+import { logger } from '../utils/logger.js';
 
 export class AnalyticsController {
   private analyticsService: AnalyticsService;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { WarmupService } from '../services/warmup.service';
-import { EvolutionApiService } from '../services/evolution-api';
-import { logger } from '../utils/logger';
+import { WarmupService } from '../services/warmup.service.js';
+import { EvolutionApiService } from '../services/evolution-api.js';
+import { logger } from '../utils/logger.js';
 
 export class WarmupController {
   private warmupService: WarmupService;

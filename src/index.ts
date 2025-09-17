@@ -1,14 +1,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { RegisterRoutes } from './tsoa-routes';
+import { RegisterRoutes } from './tsoa-routes.js';
 import swaggerUi from 'swagger-ui-express';
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ES module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 

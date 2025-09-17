@@ -1,7 +1,7 @@
-import { WarmupService } from './warmup.service';
-import { EvolutionApiService } from './evolution-api';
-import { ScheduledMessage } from '../types/warmup';
-import { logger } from '../utils/logger';
+import { WarmupService } from './warmup.service.js';
+import { EvolutionApiService } from './evolution-api.js';
+import { ScheduledMessage } from '../types/warmup.js';
+import { logger } from '../utils/logger.js';
 
 export class MessageScheduler {
   private warmupService: WarmupService;
